@@ -1,4 +1,4 @@
-import Countdown from "./components/VCountdown"
+import Countdown from "./components/Countdown"
 import type { App, Plugin } from "vue"
 
 const VCountdown: Plugin = {
@@ -6,10 +6,8 @@ const VCountdown: Plugin = {
     const name = options?.name || 'v-countdown'
     app.component(name, Countdown)
   }
-  
-  // if (typeof window !== "undefined" && window.Vue) {
-  //   window.Vue.use(vac)
-  // }
 }
+
+export { Countdown, VCountdown }
 
 export default VCountdown

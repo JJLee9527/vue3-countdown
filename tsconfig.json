@@ -28,7 +28,7 @@
     "src/*.ts",
     "src/*.d.ts",
     "src/*.tsx",
-    "src/*.vue", "src/components/VCountdown.ts",
+    "src/*.vue", "src/components/Countdown.ts", "index.ts",
   ],
   "references": [
     {
