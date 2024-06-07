@@ -8,6 +8,34 @@
 
 ### 如何使用
 
+#### 安裝
+
+透過在終端輸入以下指令安裝
+
+```bash
+pnpm dlx jsr add @jjdev/vue3-countdown
+```
+
+或直接在你的 package.json 中加入
+
+```json
+{
+  "dependencies": {
+    "@jjdev/vue3-countdown": "npm:@jsr/jjdev__vue3-countdown@^1.0.3",
+  } 
+}
+```
+
+然後在終端輸入以下指令即可。
+
+```bash
+pnpm install
+
+# 如果遇到錯誤建議可以先刪除 node_modules 再試一次
+```
+
+#### 引入
+
 你只需要在你想引入的地方引入即可。 可見下圖示意。
 
 ```typescript
