@@ -1,10 +1,10 @@
-import VCountdown from "./components/VCountdown"
+import Countdown from "./components/VCountdown"
 import type { App, Plugin } from "vue"
 
-const vc: Plugin = {
+const VCountdown: Plugin = {
   install (app: App, options?: { name?: string }) {
     const name = options?.name || 'v-countdown'
-    app.component(name, VCountdown)
+    app.component(name, Countdown)
   }
   
   // if (typeof window !== "undefined" && window.Vue) {
@@ -12,4 +12,4 @@ const vc: Plugin = {
   // }
 }
 
-export default vc
+export default VCountdown
