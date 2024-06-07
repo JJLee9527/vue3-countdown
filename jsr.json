@@ -1,5 +1,9 @@
 {
   "name": "@jjdev/vue3-countdown",
   "version": "1.0.2",
-  "exports": "./mod.ts"
+  "exports": "./mod.ts",
+  "exclude": [
+    "demo",
+    "dist"
+  ]
 }
