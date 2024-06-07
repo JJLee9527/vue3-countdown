@@ -1,0 +1,5 @@
+{
+  "name": "@jjdev/vue3-countdown",
+  "version": "1.0.0",
+  "exports": "./src/main.ts"
+}
