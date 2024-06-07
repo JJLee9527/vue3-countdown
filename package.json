@@ -5,8 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "vite --port 4001",
-    "build": "vite build",
-    "publish": "jsr publish",
+    "publish": "dlx jsr publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
