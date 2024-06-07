@@ -1,8 +1,8 @@
-import { defineComponent } from "vue";
+import { Component, defineComponent } from "vue";
 import { h } from "vue";
 import dayjs from "dayjs";
 
-export default defineComponent({
+const VCountdown: Component = defineComponent({
   name: "VCountdown",
   props: {
     tag: {
@@ -11,6 +11,8 @@ export default defineComponent({
     },
   },
   render() {
-    return h(this.tag,dayjs().get('second').toString());
+    return h(this.tag, dayjs().get('second').toString());
   },
 })
+
+export default VCountdown
