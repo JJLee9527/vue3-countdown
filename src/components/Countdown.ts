@@ -21,9 +21,8 @@ const vCountdown: Component = defineComponent({
       default: true,
     },
   },
-  setup(props, { slots }) {
-    const emit = defineEmits(['finish', 'tick'])
-
+  emits: ['tick', 'finish'],
+  setup(props, { slots, emit }) {
     let firstTimestamp = 0
     let elapsed = 0
     let last = 0
