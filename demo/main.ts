@@ -1,8 +1,8 @@
 import { createApp } from 'vue';
-import VCountdown from '../src/index';
-import App from './App.vue';
+import VCountdownPlugin from '../src/index';
+import App from './index.vue';
 
 // for demo purposes
 const app = createApp(App)
-app.use(VCountdown, { name: 'v-countdown' })
+app.use(VCountdownPlugin)
 app.mount('#app');

@@ -1,7 +1,7 @@
-import { Component, defineComponent, reactive, ref, nextTick, onMounted, onBeforeUnmount } from "vue";
+import { Component, defineComponent, defineExpose, defineEmits, ref, computed, onMounted, onBeforeUnmount } from "vue";
 import dayjs from "dayjs";
 
-const vCountdown = defineComponent({
+const vCountdown: Component = defineComponent({
   name: "vCountdown",
   props: {
     startTime: {
@@ -22,57 +22,51 @@ const vCountdown = defineComponent({
     },
   },
   setup(props, { slots }) {
-    const data= reactive<{
-      state: 'ready' | 'running' | 'paused' | 'stopped' | 'finished',
-      day: number,
-      hour: number,
-      minute: number,
-      second: number,
-      millisecond: number,
-      total: number,
-      left: number,
-    }>({
-      state: 'ready',
-      day: 0,
-      hour: 0,
-      minute: 0,
-      second: 0,
-      millisecond: 0,
-      total: 0,
-      left: 0,
-    })
-    const firstTimestamp = ref(0)
-    const elapsed = ref(0)
-    const frame = ref<number>()
-    const timeout = ref<any>()
+    const emit = defineEmits(['finish', 'tick'])
+
+    let firstTimestamp = 0
+    let elapsed = 0
+    let last = 0
+    let activateTimeout: string | number | NodeJS.Timeout | undefined = undefined
+    let frame: number | undefined = undefined
+    const state = ref<'ready' | 'running' | 'paused' | 'stopped' | 'finished'>('ready')
+    const total = ref(0)
+    const delay = ref(0)
+    const seconds = ref(0)
+
+    const minutes = computed(() => Math.floor(seconds.value / 60))
+    const hours = computed(() => Math.floor(minutes.value / 60 ))
+    const days = computed(() => Math.floor(hours.value / 24))
+    const second = computed(() => seconds.value % 60)
+    const minute = computed(() => minutes.value % 60)
+    const hour = computed(() => hours.value % 24)
+    const day = computed(() => days.value)
 
     onMounted(() => {
       init()
     })
 
     onBeforeUnmount(() => {
-      stopFrame()
-      clearTimeout(timeout.value)
+      pause()
+      activateTimeout && clearTimeout(activateTimeout)
     })
     
     function init() {
       const now = dayjs()
       const startTime = dayjs(props.startTime)
       const endTime = dayjs(props.endTime)
-      const leftTime = props.leftTime ? props.leftTime * 1000 : endTime.diff(startTime).valueOf() // convert to milliseconds
+      const timeSpan = props.leftTime ? props.leftTime * 1000 : endTime.diff(startTime).valueOf() // convert to milliseconds
       
-      data.total = data.left = leftTime
-      data.second = Math.floor(leftTime / 1000) % 60,
-      data.minute = Math.floor(leftTime / 1000 / 60) % 60,
-      data.hour = Math.floor(leftTime / 1000 / 60 / 60) % 24
-      data.day = Math.floor(leftTime / 1000 / 60 / 60 / 24)
+      total.value = last = timeSpan
+      seconds.value = Math.floor(timeSpan / 1000) // 設定初始總秒數後，將會透過 computed 來取得各時間單位
 
       if (endTime.isBefore(now)) {
-        data.state = 'finished'
+        state.value = 'finished'
+        emit('finish')
         return
       }
 
-      data.state = 'ready'
+      state.value = 'ready'
 
       if (!props.autoStart) return
 
@@ -81,68 +75,97 @@ const vCountdown = defineComponent({
         return
       }
       
-      const delay = startTime.diff(now).valueOf()
+      const delaySpan = startTime.diff(now).valueOf()
       
-      if (delay <= 0) {
+      // 如果開始時間在現在時間之前，則直接開始倒數
+      if (delaySpan <= 0) {
         startCountdown()
         return
       }
 
-      timeout.value = setTimeout(() => {
+      activateTimeout = setTimeout(() => {
         startCountdown()
-      }, delay)
+      }, delaySpan)
+      delay.value = delaySpan
 
-      console.log('delay', delay / 1000)
+      console.log(`將於 ${Math.floor(delaySpan / 1000)} 秒後開始倒數`)
     }
 
     function updateCountdown(timestamp: number) {
-      if(!firstTimestamp.value) {
-        firstTimestamp.value = timestamp
+      if(!firstTimestamp) {
+        firstTimestamp = timestamp
       } else {
-        elapsed.value = timestamp - firstTimestamp.value
+        elapsed = timestamp - firstTimestamp
       }
-      data.left = data.total - elapsed.value
+      // 算出總剩餘時間
+      last = total.value - elapsed
 
-      if (data.left <= 0) {
+      if (last <= 0) {
+        pause()
         clearData()
-        stopFrame()
-        data.state = 'finished'
+        state.value = 'finished'
+        emit('finish')
         return
       }
 
-      data.millisecond = 999 - Math.floor(elapsed.value % 1000)
-      data.second = Math.floor(data.left / 1000)
-      data.minute = Math.floor(data.second / 60)
-      data.hour = Math.floor(data.minute / 60)
+      const calcSeconds = Math.floor(last / 1000)
+      if(calcSeconds !== seconds.value) {
+        seconds.value = calcSeconds
+        emit('tick', {
+          day: day.value,
+          hour: hour.value,
+          minute: minute.value,
+          second: second.value,
+          total: total.value,
+        })
+      }
 
-      frame.value = requestAnimationFrame(updateCountdown)
+      frame = requestAnimationFrame(updateCountdown)
     }
     
-    function stopFrame() {
-      if (!frame.value) return
-      cancelAnimationFrame(frame.value)
+    function pause() {
+      if (!frame) return
+      state.value = 'paused'
+      cancelAnimationFrame(frame)
+    }
+
+    function resume() {
+      if (state.value !== 'paused') return
+      startCountdown()
     }
     
     function startCountdown() {
-      frame.value = requestAnimationFrame(updateCountdown)
-      data.state = 'running'
+      frame = requestAnimationFrame(updateCountdown)
+      state.value = 'running'
     }
 
     function clearData() {
-      firstTimestamp.value = 0
-      data.hour = 0
-      data.minute = 0
-      data.second = 0
-      data.millisecond = 0
-      data.total = 0
-      data.left = 0
+      firstTimestamp = 0
+      elapsed = 0
+      last = 0
+      delay.value = 0
     }
+
+    defineExpose({
+      start: startCountdown,
+      pause,
+      resume,
+      clearData,
+    })
 
     return () => {
       if (slots.default)
-        return slots.default(data)
+        return slots.default({
+          state: state.value,
+          day: day.value,
+          hour: hour.value,
+          minute: minute.value,
+          second: second.value,
+          delay: delay.value,
+          total: total.value,
+        })
     }
   },
 })
 
-export default vCountdown as Component
+export default vCountdown
