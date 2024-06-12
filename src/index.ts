@@ -1,14 +1,12 @@
-import VCountdown from "./components/Countdown"
+import VueCountdown from "./Countdown"
 import type { App, Plugin } from "vue"
 
 const VCountdownPlugin: Plugin = {
-  install (app: App, options?: { name?: string }) {
-    const name = options?.name
-    app.component(name || 'v-countdown', VCountdown)
-    app.component(name || 'VCountdown', VCountdown)
+  install (app: App, name?: string) {
+    app.component(name || VueCountdown.name!, VueCountdown)
   }
 }
 
-export { VCountdownPlugin, VCountdown }
+export { VCountdownPlugin, VueCountdown }
 
 export default VCountdownPlugin
