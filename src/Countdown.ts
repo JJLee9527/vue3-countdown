@@ -173,15 +173,16 @@ const VueCountdown: Component = defineComponent({
     function stop() {
       if (state.value === 'stopped') return
 
+      frame && cancelAnimationFrame(frame)
       state.value = 'stopped'
       milliseconds.value = 0
-      frame && cancelAnimationFrame(frame)
       update()
     }
     
     function start() {
       if (['running','finished'].includes(state.value)) return
 
+      init()
       state.value = 'running'
       frame = requestAnimationFrame(step)
     }
