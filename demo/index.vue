@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { VueCountdown } from '../src/index'
 
-const countdownRef = ref<typeof VueCountdown | null>(null)
+const countdownRef = ref<any>()
 const emitMessage = ref(false)
 
 function startCountdown() {

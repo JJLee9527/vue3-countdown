@@ -10,7 +10,7 @@ import type { App, Plugin } from "vue"
  * @link Examples
  * https://github.com/JJLee9527/vue3-countdown/tree/main/demo
  */
-const VueCountdown: typeof Countdown = Countdown
+const VueCountdown = Countdown
 
 /**
  * Vue 3 plugin to provide the VueCountdown component.

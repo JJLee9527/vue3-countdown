@@ -1,10 +1,11 @@
 import { defineComponent,nextTick, ref, computed, onMounted, onBeforeUnmount, h } from "vue";
+import type { Component } from "vue";
 import { formatCountdown } from "./utils";
 
 const UNIT_SECOND = 1000
 const TOLERANCE = 30 // in milliseconds
 
-const VueCountdown = defineComponent({
+const VueCountdown: Component = defineComponent({
   name: "VueCountdown",
   props: {
     startTime: {
