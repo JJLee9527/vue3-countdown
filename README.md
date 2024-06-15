@@ -58,13 +58,14 @@ import { VueCountdown as Countdown } from '@jjdev/vue3-countdown'
 
 ### Parameters
 
-| Name       | Type                                    | Default   |
-| ---------- | --------------------------------------- | --------- |
-| start-time | string `Date ISO string`                | undefined |
-| end-time   | string `Date ISO string`                | undefined |
-| time-span  | number `in seconds`                     | 0         |
-| autostart  | boolean                                 | true      |
-| state      | `ready \| running \| finished \| pause` | `ready`   |
+| Name        | Type                                    | Default   |
+| ----------- | --------------------------------------- | --------- |
+| start-time  | string `Date ISO string`                | undefined |
+| end-time    | string `Date ISO string`                | undefined |
+| time-span   | number `in seconds`                     | 0         |
+| autostart   | boolean                                 | true      |
+| emit-events | boolean                                 | false     |
+| state       | `ready \| running \| finished \| pause` | `ready`   |
 
 ### Methods
 
@@ -74,13 +75,13 @@ import { VueCountdown as Countdown } from '@jjdev/vue3-countdown'
 | pause  | Pause the countdown timer.  |
 | resume | Resume the countdown timer. |
 | reset  | Reset the countdown timer.  |
-| stop  | Stop the countdown timer.  |
+| stop   | Stop the countdown timer.   |
 
 ### Events
 
 | Name   | Description                                          |
 | ------ | ---------------------------------------------------- |
-| update   | Event handler for each tick of the countdown timer.  |
+| update | Event handler for each tick of the countdown timer.  |
 | finish | Event handler for when the countdown timer finishes. |
 
 ---

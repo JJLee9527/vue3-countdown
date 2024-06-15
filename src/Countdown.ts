@@ -1,10 +1,10 @@
-import { Component, defineComponent, defineExpose, nextTick, ref, computed, onMounted, onBeforeUnmount, h } from "vue";
+import { defineComponent,nextTick, ref, computed, onMounted, onBeforeUnmount, h } from "vue";
 import { formatCountdown } from "./utils";
 
 const UNIT_SECOND = 1000
 const TOLERANCE = 30 // in milliseconds
 
-const VueCountdown: Component = defineComponent({
+const VueCountdown = defineComponent({
   name: "VueCountdown",
   props: {
     startTime: {
@@ -43,7 +43,7 @@ const VueCountdown: Component = defineComponent({
     },
   },
   emits: ['update', 'finish'],
-  setup(props, { slots, emit }) {
+  setup(props, { slots, emit, expose }) {
     let startTimestamp = 0 // initial timestamp
     let last = 0
     let activateTimeout: string | number | NodeJS.Timeout | undefined = undefined
@@ -80,7 +80,7 @@ const VueCountdown: Component = defineComponent({
       const timeSpan = props.timeSpan * 1000 || (endTime - startTime) // convert to milliseconds
       total.value = milliseconds.value = timeSpan
 
-      if (timeSpan <= 0) {
+      if (timeSpan <= 0 || now > endTime) {
         state.value = 'finished'
         update()
         return
@@ -117,12 +117,10 @@ const VueCountdown: Component = defineComponent({
       
       // calculate total remaining time
       const elapsed = Date.now() - startTimestamp
-      console.log(elapsed)
       last = total.value - elapsed
 
       if (last <= 0) {
         state.value = 'finished'
-        update()
         stop()
         return
       }
@@ -130,7 +128,6 @@ const VueCountdown: Component = defineComponent({
       const delayed = elapsed % props.interval
       const updating = delayed <= TOLERANCE
       if (updating) {
-        console.log('updating', last)
         milliseconds.value = last
         update()
       }
@@ -188,11 +185,11 @@ const VueCountdown: Component = defineComponent({
       frame = requestAnimationFrame(step)
     }
 
-    defineExpose({
+    expose({
       start,
       pause,
       resume,
-      stop
+      stop,
     })
 
     return () => {
@@ -225,4 +222,4 @@ const VueCountdown: Component = defineComponent({
   },
 })
 
-export default VueCountdown
+export default VueCountdown as typeof VueCountdown
