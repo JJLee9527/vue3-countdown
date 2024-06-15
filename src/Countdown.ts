@@ -222,4 +222,5 @@ const VueCountdown = defineComponent({
   },
 })
 
-export default VueCountdown as typeof VueCountdown
+export default VueCountdown
+export { VueCountdown }
