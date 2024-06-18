@@ -1,12 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { VueCountdown } from '../src/index'
 
 const countdownRef = ref<any>()
 const emitMessage = ref(false)
+const dynamicStart = ref()
+const dynamicEnd = ref()
 
 function startCountdown() {
-  countdownRef.value?.start()
+  emitMessage.value = false
+  dynamicStart.value = new Date().toISOString()
+  dynamicEnd.value = new Date(Date.now() + 4000).toISOString()
+
+  nextTick(() => {
+    countdownRef.value?.start()
+  })
+}
+
+function stopCountdown() {
+  countdownRef.value?.stop()
 }
 
 function onCountdownFinished() {
@@ -47,13 +59,15 @@ function onCountdownFinished() {
     <section>
       <h1>Get emitting events</h1>
       <div class="demo">
-        <VueCountdown :time-span="3" :interval="100" :auto-start="false" :emit-events="true" format="ss.S" @finish="onCountdownFinished" ref="countdownRef">
+        <VueCountdown :start-time="dynamicStart" :end-time="dynamicEnd" :interval="100" :auto-start="false" :emit-events="true" format="ss.S" @finish="onCountdownFinished" ref="countdownRef">
         </VueCountdown>
         
         <div>
           <button @click="startCountdown">Start</button>
+          <button @click="stopCountdown">Stop</button>
         </div>
-        <p>@finish: {{ emitMessage }}</p>
+        <p><span>Start Time: {{ dynamicStart }}</span><br><span>End Time: {{ dynamicEnd }}</span></p>
+        <p>Finished: {{ emitMessage }}</p>
       </div>
     </section>
   </div>

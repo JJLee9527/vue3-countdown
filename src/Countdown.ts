@@ -75,6 +75,7 @@ const VueCountdown: Component = defineComponent({
     })
     
     function init() {
+      startTimestamp = 0
       const now = new Date().getTime()
       const startTime = props.startTime ? new Date(props.startTime).getTime() : now
       const endTime = props.endTime ? new Date(props.endTime).getTime() : now
