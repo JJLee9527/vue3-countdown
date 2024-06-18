@@ -180,7 +180,7 @@ const VueCountdown: Component = defineComponent({
     }
     
     function start() {
-      if (['running','finished'].includes(state.value)) return
+      if (['running'].includes(state.value)) return
 
       init()
       state.value = 'running'
