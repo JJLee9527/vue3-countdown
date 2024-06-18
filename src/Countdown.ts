@@ -67,6 +67,7 @@ const VueCountdown: Component = defineComponent({
 
     onMounted(() => {
       init()
+      if (props.autoStart) autoStart()
     })
 
     onBeforeUnmount(() => {
@@ -85,17 +86,16 @@ const VueCountdown: Component = defineComponent({
       if (timeSpan <= 0 || now > endTime) {
         state.value = 'finished'
         update()
-        return
       }
+    }
 
-      if (!props.autoStart) return
-
-      if( props.timeSpan > 0) {
-        start()
-        return
-      }
-      
+    function autoStart() {
+      const now = new Date().getTime()
+      const startTime = props.startTime ? new Date(props.startTime).getTime() : now
+      const endTime = props.endTime ? new Date(props.endTime).getTime() : now
       const delaySpan = startTime - now
+
+      if (endTime && now > endTime) return
       
       // 如果開始時間在現在時間之前，則直接開始倒數
       if (delaySpan <= 0) {
@@ -182,8 +182,11 @@ const VueCountdown: Component = defineComponent({
     
     function start() {
       if (['running'].includes(state.value)) return
+      
+      const endTime = props.endTime ? new Date(props.endTime).getTime() : 0
+      const now = new Date().getTime()
+      if (endTime && now < endTime) init()
 
-      init()
       state.value = 'running'
       frame = requestAnimationFrame(step)
     }

@@ -3,9 +3,13 @@ import { ref, nextTick } from 'vue'
 import { VueCountdown } from '../src/index'
 
 const countdownRef = ref<any>()
+const countdownRef2 = ref<any>()
 const emitMessage = ref(false)
 const dynamicStart = ref()
 const dynamicEnd = ref()
+const dynamicStart2 = ref()
+const dynamicEnd2 = ref()
+
 
 function startCountdown() {
   emitMessage.value = false
@@ -19,6 +23,19 @@ function startCountdown() {
 
 function stopCountdown() {
   countdownRef.value?.stop()
+}
+
+function startCountdown2() {
+  dynamicStart2.value = '2024-06-08T16:54:03.000'
+  dynamicEnd2.value = '2024-06-08T16:54:08.000'
+
+  nextTick(() => {
+    countdownRef2.value?.start()
+  })
+}
+
+function stopCountdown2() {
+  countdownRef2.value?.stop()
 }
 
 function onCountdownFinished() {
@@ -46,18 +63,7 @@ function onCountdownFinished() {
       </div>
     </section>
     <section>
-      <h1>Manually start counting down</h1>
-      <div class="demo">
-        <VueCountdown :time-span="8.5" :interval="100" :auto-start="false" :emit-events="true" format="ss.S">
-        </VueCountdown>
-        
-        <div>
-          <button @click="startCountdown">Start</button>
-        </div>
-      </div>
-    </section>
-    <section>
-      <h1>Get emitting events</h1>
+      <h1>Through start-time and end-time</h1>
       <div class="demo">
         <VueCountdown :start-time="dynamicStart" :end-time="dynamicEnd" :interval="100" :auto-start="false" :emit-events="true" format="ss.S" @finish="onCountdownFinished" ref="countdownRef">
         </VueCountdown>
@@ -68,6 +74,20 @@ function onCountdownFinished() {
         </div>
         <p><span>Start Time: {{ dynamicStart }}</span><br><span>End Time: {{ dynamicEnd }}</span></p>
         <p>Finished: {{ emitMessage }}</p>
+      </div>
+    </section>
+
+    <section>
+      <h1>When end-time is after current time</h1>
+      <div class="demo">
+        <VueCountdown :start-time="dynamicStart2" :end-time="dynamicEnd2" :interval="100" :auto-start="false" :emit-events="true" format="ss.S" ref="countdownRef2">
+        </VueCountdown>
+        
+        <div>
+          <button @click="startCountdown2">Start</button>
+          <button @click="stopCountdown2">Stop</button>
+        </div>
+        <p><span>Start Time: {{ dynamicStart2 }}</span><br><span>End Time: {{ dynamicEnd2 }}</span></p>
       </div>
     </section>
   </div>
