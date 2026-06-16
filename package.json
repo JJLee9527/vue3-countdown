@@ -16,9 +16,9 @@
     "vue": "3"
   },
   "devDependencies": {
-    "@types/node": "^20.14.2",
-    "@vitejs/plugin-vue": "^5.0.5",
-    "vite": "^5.2.12",
-    "vitest": "^1.6.0"
+    "@types/node": "^20.19.0",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "vite": "^8.0.13",
+    "vitest": "^4.1.9"
   }
 }
