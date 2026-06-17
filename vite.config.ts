@@ -2,8 +2,8 @@
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 import { readFileSync } from 'fs'
-const jsrJson = JSON.parse(readFileSync('./jsr.json', 'utf-8'))
-const appVersion = jsrJson.version
+const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
+const appVersion = pkg.version
 
 export default defineConfig({
   define: {
