@@ -1,6 +1,6 @@
 {
   "name": "vue3-countdown",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "packageManager": "pnpm@11.0.9",
   "description": "",
   "main": "src/index.ts",
