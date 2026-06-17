@@ -8,6 +8,7 @@
     "dev": "vite --port 4001",
     "test": "echo \"Error: no test specified\" && exit 1",
     "sync-version": "node scripts/sync-version.mjs",
+    "check-version": "node scripts/check-version.mjs",
     "version": "node scripts/sync-version.mjs"
   },
   "type": "module",
