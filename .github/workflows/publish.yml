@@ -13,5 +13,11 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - run: node scripts/sync-version.mjs
-      - run: npx jsr publish
+      - run: pnpm dlx jsr publish
